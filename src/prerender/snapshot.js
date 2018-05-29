@@ -6,7 +6,6 @@ export default (protocol, host, path, delay) => {
   return new Promise((resolve, reject) => {
     let reactSnapshotRenderCalled = false
     const url = `${protocol}//${host}${path}`
-    debugger
     jsdom.env({
       url,
       headers: { Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" },
@@ -26,11 +25,12 @@ export default (protocol, host, path, delay) => {
       created: (err, window) => {
         if (err) return reject(err)
         if (!window) return reject(`Looks like no page exists at ${url}`)
-        window.reactSnapshotRender = () => {
+        window.reactSnapshotRender = promise => {
           reactSnapshotRenderCalled = true
-          setTimeout(() => {
-            resolve(window)
-          }, delay)
+          promise.then(() => resolve(window))
+          // setTimeout(() => {
+          //   resolve(window)
+          // }, delay)
         }
       },
       done: (err, window) => {

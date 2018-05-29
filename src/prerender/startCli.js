@@ -1,5 +1,5 @@
 require("babel-register")({
-  presets: ['env'],
+  presets: ['env', 'react-app'],
   plugins: ['add-module-exports']
 })
 var cli = require('./cli')
