@@ -10,7 +10,7 @@ import {render as prerender} from 'prerender'
 // ========================================================
 const MOUNT_NODE = document.getElementById('root')
 
-const render = Container => prerender(() => <Container history={history} store={store} />, MOUNT_NODE)
+const render = Container => prerender(() => <Container history={history} store={store} />, MOUNT_NODE, store)
 
 render(App)
 

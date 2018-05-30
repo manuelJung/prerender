@@ -33,6 +33,7 @@
     "mkdirp": "^0.5.1",
     "react-scripts": "1.1.4",
     "react-snapshot": "^1.3.0",
+    "redux-dynamic-middlewares": "^0.3.0",
     "safe-commander": "^2.11.2",
     "webpack-flush-chunks": "^1.2.3"
   },

@@ -3,6 +3,8 @@ import { routerMiddleware } from 'react-router-redux'
 import makeRootReducer from './reducers'
 import thunkMiddleware from 'redux-thunk'
 // import createEpicMiddleware from './epics'
+import dynamicMiddlewares from 'redux-dynamic-middlewares'
+
 
 export default (initialState = {}, history = {}) => {
   // ======================================================
@@ -10,6 +12,7 @@ export default (initialState = {}, history = {}) => {
   // ======================================================
   const middleware = [
     // createEpicMiddleware(),
+    dynamicMiddlewares,
     thunkMiddleware,
     routerMiddleware(history)
   ]
