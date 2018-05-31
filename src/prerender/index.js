@@ -22,9 +22,7 @@ export const render = (RootComponent, domElement, store) => {
         ))
         insertModules(modules)
         createDefaultState(store)
-        // console.log('modules', modules)
-        // console.log('state', JSON.stringify(store.getState(), null, 2))
-        // console.log('styles', sheet.getStyleTags())
+        createdStyleTags(sheet)
       })
       .catch(console.log)
   )
@@ -39,6 +37,11 @@ export const render = (RootComponent, domElement, store) => {
       ReactDOM.render(<RootComponent/>, domElement)
     }
   }
+}
+
+function createdStyleTags(sheet){
+  const styleTags = sheet.getStyleTags()
+  document.head.innerHTML += styleTags
 }
 
 function createDefaultState (store) {
