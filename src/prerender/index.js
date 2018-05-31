@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server'
 import Loadable from 'react-loadable'
 import LoadableCapture from './LoadableCapture'
 import { addMiddleware } from 'redux-dynamic-middlewares'
+import { ServerStyleSheet, __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS } from 'styled-components'
  
 
 export const render = (RootComponent, domElement, store) => {
@@ -13,14 +14,19 @@ export const render = (RootComponent, domElement, store) => {
       .then(() => collectStoreData(RootComponent, store))
       .then(() => {
         let modules = []
-        domElement.innerHTML = ReactDOMServer.renderToString(
+        const { StyleSheet } = __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS
+        StyleSheet.reset(true)
+        const sheet = new ServerStyleSheet()
+        domElement.innerHTML = ReactDOMServer.renderToString(sheet.collectStyles(
           <LoadableCapture report={name => modules.push(name)}>
             <RootComponent/>
           </LoadableCapture>
-        )
-        console.log('extracted modules', modules)
-        console.log(JSON.stringify(store.getState(), null, 2))
+        ))
+        // console.log('modules', modules)
+        // console.log('state', JSON.stringify(store.getState(), null, 2))
+        console.log('styles', sheet.getStyleTags())
       })
+      .catch(console.log)
   )
   } else {
     ReactDOM.render(<RootComponent/>, domElement)

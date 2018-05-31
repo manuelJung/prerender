@@ -18,6 +18,10 @@
       "type": "node",
       "request": "launch",
       "name": "Programm starten",
+      "env":{
+        "NODE_PATH": "src",
+        "NODE_ENV": "production"
+      },
       "program": "${workspaceFolder}/src/prerender/startCli.js"
     }
   ]
