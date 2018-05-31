@@ -20,15 +20,29 @@ export const render = (RootComponent, domElement, store) => {
             <RootComponent/>
           </LoadableCapture>
         ))
-        console.log('modules', modules)
-        console.log('state', JSON.stringify(store.getState(), null, 2))
-        console.log('styles', sheet.getStyleTags())
+        insertModules(modules)
+        // console.log('modules', modules)
+        // console.log('state', JSON.stringify(store.getState(), null, 2))
+        // console.log('styles', sheet.getStyleTags())
       })
       .catch(console.log)
   )
   } else {
     ReactDOM.render(<RootComponent/>, domElement)
   }
+}
+
+function insertModules(modules){
+  const allLoadableScripts = Array.from(document.getElementsByTagName('script'))
+    .filter(script => script.src && script.src.includes('/static/js/'))
+    .filter(script => !script.src.includes('/js/main.'))
+  const usedLoadableScripts = modules.map(name => allLoadableScripts.find(script => script.src.includes(name)))
+  const mainScript = Array.from(document.getElementsByTagName('script'))
+    .filter(script => script.src && script.src.includes('/static/js/'))
+    .find(script => script.src.includes('/js/main.'))
+
+  allLoadableScripts.forEach(script => script.remove())
+  usedLoadableScripts.forEach(script => mainScript.parentNode.insertBefore(script, mainScript))
 }
 
 function createSheet(){
