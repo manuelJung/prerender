@@ -11,7 +11,7 @@ class ProductPage extends React.Component {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
     let {shouldFetch} = this.props
     if(shouldFetch('componentDidMount')){
       this.props.fetchProduct('componentDidMount')
