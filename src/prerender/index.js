@@ -21,6 +21,7 @@ export const render = (RootComponent, domElement, store) => {
           </LoadableCapture>
         ))
         insertModules(modules)
+        createDefaultState(store)
         // console.log('modules', modules)
         // console.log('state', JSON.stringify(store.getState(), null, 2))
         // console.log('styles', sheet.getStyleTags())
@@ -28,8 +29,24 @@ export const render = (RootComponent, domElement, store) => {
       .catch(console.log)
   )
   } else {
-    ReactDOM.render(<RootComponent/>, domElement)
+    if(process.env.NODE_ENV === 'production'){
+      Loadable.preloadReady().then(() => {
+        console.log('Preload ready')
+        ReactDOM.hydrate(<RootComponent/>, domElement)  
+      })
+    }
+    if(process.env.NODE_ENV !== 'production'){
+      ReactDOM.render(<RootComponent/>, domElement)
+    }
   }
+}
+
+function createDefaultState (store) {
+  const script = document.createElement('script')
+  const state = JSON.stringify(store.getState())
+  script.type = 'text/javascript'
+  script.text = `window.___INITIAL_STATE__=${state}`
+  document.head.appendChild(script)
 }
 
 function insertModules(modules){

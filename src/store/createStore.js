@@ -25,12 +25,12 @@ export default (initialState = {}, history = {}) => {
   let composeEnhancers = compose
 
   
-  if (process.env.NODE_ENV === 'development') {
-    const composeWithDevToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    if (typeof composeWithDevToolsExtension === 'function') {
-      composeEnhancers = composeWithDevToolsExtension
-    }
+  // if (process.env.NODE_ENV === 'development') {
+  const composeWithDevToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  if (typeof composeWithDevToolsExtension === 'function') {
+    composeEnhancers = composeWithDevToolsExtension
   }
+  // }
 
   // ======================================================
   // Store Instantiation and HMR Setup
