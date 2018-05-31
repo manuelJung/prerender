@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchProduct, getProducts, shouldFetch} from 'modules/products'
+import styled from 'styled-components'
 
 class ProductPage extends React.Component {
   
@@ -21,12 +22,12 @@ class ProductPage extends React.Component {
   render(){
     let {products} = this.props
     return (
-      <div>
-        <h1>Product Page</h1>
+      <Wrapper active={Boolean(products.length)}>
+        <Headline>Product Page</Headline>
         {products.map(o => (
           <h3 key={o.number}>{o.number} <small>{o.price.toFixed(2)}</small></h3>
         ))}
-      </div>
+      </Wrapper>
     )
   }
 }
@@ -38,3 +39,14 @@ export default connect(
   }),
   {fetchProduct}
 )(ProductPage)
+
+const Wrapper = styled.section`
+  padding: 20px;
+  border: 1px solid grey;
+  background: ${props => props.active ? 'steelblue' : null};
+`
+
+const Headline = styled.h1`
+  color: lightgrey;
+  font-weight: bold;
+`

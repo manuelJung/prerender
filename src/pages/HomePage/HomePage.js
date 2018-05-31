@@ -16,5 +16,4 @@ export default HomePage
 
 const Wrapper = styled.section`
   > h1 { color: steelblue; text-decoration: underline; }
-
 `
