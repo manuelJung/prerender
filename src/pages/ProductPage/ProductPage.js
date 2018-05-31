@@ -3,13 +3,21 @@ import {connect} from 'react-redux'
 import {fetchProduct, getProducts, shouldFetch} from 'modules/products'
 
 class ProductPage extends React.Component {
-  number = '12345678'
+  
   componentWillMount(){
     let {shouldFetch} = this.props
-    if(shouldFetch(this.number)){
-      this.props.fetchProduct(this.number)
+    if(shouldFetch('componentWillMount')){
+      this.props.fetchProduct('componentWillMount')
     }
   }
+
+  componentWillMount(){
+    let {shouldFetch} = this.props
+    if(shouldFetch('componentDidMount')){
+      this.props.fetchProduct('componentDidMount')
+    }
+  }
+  
   render(){
     let {products} = this.props
     return (
