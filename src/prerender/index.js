@@ -14,16 +14,14 @@ export const render = (RootComponent, domElement, store) => {
       .then(() => collectStoreData(RootComponent, store))
       .then(() => {
         let modules = []
-        const { StyleSheet } = __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS
-        StyleSheet.reset(true)
-        const sheet = new ServerStyleSheet()
+        const sheet = createSheet()
         domElement.innerHTML = ReactDOMServer.renderToString(sheet.collectStyles(
           <LoadableCapture report={name => modules.push(name)}>
             <RootComponent/>
           </LoadableCapture>
         ))
-        // console.log('modules', modules)
-        // console.log('state', JSON.stringify(store.getState(), null, 2))
+        console.log('modules', modules)
+        console.log('state', JSON.stringify(store.getState(), null, 2))
         console.log('styles', sheet.getStyleTags())
       })
       .catch(console.log)
@@ -31,6 +29,12 @@ export const render = (RootComponent, domElement, store) => {
   } else {
     ReactDOM.render(<RootComponent/>, domElement)
   }
+}
+
+function createSheet(){
+  const { StyleSheet } = __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS
+  StyleSheet.reset(true)
+  return new ServerStyleSheet()
 }
 
 
