@@ -8,11 +8,11 @@ import { ServerStyleSheet, __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS 
 import {IS_CRAWLER} from './const'
  
 
-export const render = (RootComponent, domElement, store) => {
+export const render = (RootComponent, domElement, {store, incrementers, decrementers}) => {
   if (IS_CRAWLER) {
     window.reactSnapshotRender(
       Loadable.preloadAll()
-      .then(() => collectStoreData(RootComponent, store, domElement))
+      .then(() => collectStoreData(RootComponent, store, domElement, incrementers, decrementers))
       .then(() => {
         let modules = []
         const sheet = createSheet()
@@ -73,13 +73,12 @@ function createSheet(){
 }
 
 
-async function collectStoreData(RootComponent, store, domElement){
+async function collectStoreData(RootComponent, store, domElement, incrementers, decrementers){
   let asyncCounter = 0
   let asyncCounterCalled = false
   addMiddleware(store => next => action => {
-    if(action.type === 'products/FETCH_PRODUCTS_REQUEST') asyncCounter++
-    if(action.type === 'products/FETCH_PRODUCTS_SUCCESS') asyncCounter--
-    if(action.type === 'products/FETCH_PRODUCTS_FAILURE') asyncCounter--
+    if(incrementers.includes(action.type)) asyncCounter++
+    if(decrementers.includes(action.type)) asyncCounter--
     return next(action)
   })
   ReactDOM.render(<RootComponent/>, domElement)
@@ -91,7 +90,7 @@ async function collectStoreData(RootComponent, store, domElement){
   await ReactDOM.unmountComponentAtNode(domElement)
   
   if(asyncCounterCalled){
-    return await collectStoreData(RootComponent, store, domElement)
+    return await collectStoreData(RootComponent, store, domElement, incrementers, decrementers)
   }
 }
 
