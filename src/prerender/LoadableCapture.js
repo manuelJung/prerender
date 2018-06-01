@@ -1,5 +1,7 @@
 import React from 'react'
 import pt from 'prop-types'
+import Loadable from 'react-loadable'
+import {IS_CRAWLER} from './const'
 
 export default class LoadableCapture extends React.Component {
   static propTypes = {
@@ -10,7 +12,7 @@ export default class LoadableCapture extends React.Component {
     prerender: pt.shape({
       report: pt.func.isRequired
     }).isRequired
-  };
+  }
 
   getChildContext() {
     return {
@@ -22,5 +24,18 @@ export default class LoadableCapture extends React.Component {
 
   render() {
     return React.Children.only(this.props.children)
+  }
+}
+
+export function loadComponent ({namespace, loader, loading}) {
+  const Component = Loadable({ loader, loading })
+  if(!IS_CRAWLER) return (props => <Component {...props}/>)
+
+  return class extends React.Component {
+    static contextTypes = {
+      prerender: pt.shape({ report: pt.func.isRequired })
+    }
+    componentWillMount = () => this.context.prerender && this.context.prerender.report(namespace)
+    render = () => (<Component {...this.props}/>)
   }
 }

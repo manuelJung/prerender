@@ -5,10 +5,11 @@ import Loadable from 'react-loadable'
 import LoadableCapture from './LoadableCapture'
 import { addMiddleware } from 'redux-dynamic-middlewares'
 import { ServerStyleSheet, __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS } from 'styled-components'
+import {IS_SERVER} from './const'
  
 
 export const render = (RootComponent, domElement, store) => {
-  if (navigator.userAgent.match(/Node\.js/i) && window && window.reactSnapshotRender) {
+  if (IS_SERVER) {
     window.reactSnapshotRender(
       Loadable.preloadAll()
       .then(() => collectStoreData(RootComponent, store, domElement))

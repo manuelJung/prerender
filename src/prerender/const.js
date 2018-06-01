@@ -1,0 +1,1 @@
+export const IS_CRAWLER = window && window.reactSnapshotRender && navigator.userAgent.match(/Node\.js/i)
