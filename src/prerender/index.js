@@ -25,7 +25,10 @@ export const render = (RootComponent, domElement, {store, incrementers, decremen
         createDefaultState(store)
         createdStyleTags(sheet)
       })
-      .catch(console.log)
+      .catch(err => {
+        console.log(err)
+        process.exit(1)
+      })
   )
   } else {
     if(process.env.NODE_ENV === 'production'){
