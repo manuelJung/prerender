@@ -4,6 +4,8 @@ import pt from 'prop-types'
 
 const ProductPage = Loadable({
   loader: () => import(/* webpackChunkName: "pages-ProductPage" */ `./ProductPage`),
+  modules: ['./ProductPage'],
+  webpack: () => [require.resolveWeak('./ProductPage')],
   loading: () => <div>Loading...</div> 
 })
 

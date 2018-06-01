@@ -4,6 +4,8 @@ import pt from 'prop-types'
 
 const HomePage = Loadable({
   loader: () => import(/* webpackChunkName: "pages-HomePage" */ `./HomePage`),
+  modules: ['./HomePage'],
+  webpack: () => [require.resolveWeak('./HomePage')],
   loading: () => <div>Loading...</div> 
 })
 

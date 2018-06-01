@@ -13,7 +13,6 @@ export const render = (RootComponent, domElement, store) => {
       Loadable.preloadAll()
       .then(() => collectStoreData(RootComponent, store, domElement))
       .then(() => {
-        console.log(window.innerWidth)
         let modules = []
         const sheet = createSheet()
         domElement.innerHTML = ReactDOMServer.renderToString(sheet.collectStyles(
@@ -62,7 +61,8 @@ function insertModules(modules){
     .find(script => script.src.includes('/js/main.'))
 
   allLoadableScripts.forEach(script => script.remove())
-  usedLoadableScripts.forEach(script => mainScript.parentNode.insertBefore(script, mainScript))
+  // usedLoadableScripts.forEach(script => mainScript.parentNode.insertBefore(script, mainScript))
+  usedLoadableScripts.forEach(script => document.body.appendChild(script))
 }
 
 function createSheet(){
