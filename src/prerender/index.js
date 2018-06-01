@@ -11,8 +11,9 @@ export const render = (RootComponent, domElement, store) => {
   if (navigator.userAgent.match(/Node\.js/i) && window && window.reactSnapshotRender) {
     window.reactSnapshotRender(
       Loadable.preloadAll()
-      .then(() => collectStoreData(RootComponent, store))
+      .then(() => collectStoreData(RootComponent, store, domElement))
       .then(() => {
+        console.log(window.innerWidth)
         let modules = []
         const sheet = createSheet()
         domElement.innerHTML = ReactDOMServer.renderToString(sheet.collectStyles(
@@ -29,7 +30,6 @@ export const render = (RootComponent, domElement, store) => {
   } else {
     if(process.env.NODE_ENV === 'production'){
       Loadable.preloadReady().then(() => {
-        console.log('Preload ready')
         ReactDOM.hydrate(<RootComponent/>, domElement)  
       })
     }
@@ -72,7 +72,7 @@ function createSheet(){
 }
 
 
-async function collectStoreData(RootComponent, store){
+async function collectStoreData(RootComponent, store, domElement){
   let asyncCounter = 0
   let asyncCounterCalled = false
   addMiddleware(store => next => action => {
@@ -81,13 +81,17 @@ async function collectStoreData(RootComponent, store){
     if(action.type === 'products/FETCH_PRODUCTS_FAILURE') asyncCounter--
     return next(action)
   })
-  ReactDOMServer.renderToString(<RootComponent/>)
+  ReactDOM.render(<RootComponent/>, domElement)
   await wait(100) 
   while(asyncCounter > 0){ 
     asyncCounterCalled = true
     await wait(100) 
   }
-  return asyncCounterCalled ? collectStoreData(RootComponent, store) : 'done'
+  await ReactDOM.unmountComponentAtNode(domElement)
+  
+  if(asyncCounterCalled){
+    return await collectStoreData(RootComponent, store, domElement)
+  }
 }
 
 const wait = ms => new Promise(resolve => setTimeout(() => resolve()), ms)
