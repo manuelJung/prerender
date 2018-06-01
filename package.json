@@ -40,7 +40,7 @@
   "scripts": {
     "start": "NODE_PATH=src react-scripts start",
     "build": "NODE_PATH=src react-scripts build",
-    "prerender": "npm run build && NODE_PATH=src NODE_ENV=production node src/prerender/startCli.js",
+    "prerender": "npm run build && NODE_PATH=src NODE_ENV=production node src/prerender/createStaticSites",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
