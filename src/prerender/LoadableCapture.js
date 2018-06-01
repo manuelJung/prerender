@@ -27,8 +27,8 @@ export default class LoadableCapture extends React.Component {
   }
 }
 
-export function loadComponent ({namespace, loader, loading}) {
-  const Component = Loadable({ loader, loading })
+export function loadComponent ({namespace, ...loadableArgs}) {
+  const Component = Loadable({ ...loadableArgs })
   if(!IS_CRAWLER) return (props => <Component {...props}/>)
 
   return class extends React.Component {
